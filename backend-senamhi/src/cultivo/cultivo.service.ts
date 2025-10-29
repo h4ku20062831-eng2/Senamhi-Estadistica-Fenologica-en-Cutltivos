@@ -97,23 +97,28 @@ export class CultivoService {
 
         // Obtenemos todo la base de datos de cultivoFase
         const fases = await this.cultivoFaseRepo.find({
-            relations: ["fases", "cultivo"]
+            relations: ["fases", "cultivo", "registros"]
         })
 
         // Relacionamos con  sus FK, para poder actualizar el nuevo array con los valores que pertenece a cada 
         // dato que existe para evitar que el usuario vuelva a escribir esos datos
 
-
-        // Mapeamos o creamos otro array con valores existentes pero agregando su analisis a cada fase
-            const datos = (await fases).map((d) => {
-                const resultado = this.analisisCultivo.hacerAnalisis(d.fase.id)
+        const datos = fases.flatMap((d) => {
+            d.registros.map((registro) => {
+                const resultado = this.analisisCultivo.hacerAnalisis(registro.valor);
 
                 return {
                     cultivo: d.cultivo.nombreCultivo,
-                    fases: d.fase.codigo,
-                    analisis: resultado
+                    fases: d.cultivo.fases,
+                    fecha: registro.fecha,
+                    valor: registro.valor,
+                    analisis: resultado,
                 }
             })
+        })
+
+        // Mapeamos o creamos otro array con valores existentes pero agregando su analisis a cada fase
+
             return datos
     }
 

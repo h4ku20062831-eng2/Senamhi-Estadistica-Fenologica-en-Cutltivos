@@ -1,4 +1,4 @@
-# 🌱 Proyecto de Gestión de Cultivos
+# 🌱 Proyecto de Meteorologico de Senamhi
 
 Este proyecto utiliza NestJS con TypeORM para la gestión de cultivos y sus fases fenológicas.
 

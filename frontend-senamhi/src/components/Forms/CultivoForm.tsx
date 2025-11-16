@@ -14,11 +14,12 @@ export const CultivoForm = () => {
     });
 
 
-    const handleChange  = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setCultivoForm({...cultivoForm, [e.target.name]: e.target.value}) 
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setCultivoForm({ ...cultivoForm, [e.target.name]: e.target.value })
+
         // Trae los name de un input o label junto al valor haciendo que se cree un nuevo objeto cultivoForm, con los valores nuevos ingresados
     }
-    
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -32,12 +33,10 @@ export const CultivoForm = () => {
 
         // Especificamos el tipo de dato que recibira createRequest, ya que si dejamos solo el useState, los valores entrarian como string y romperia mi backend
         // Por ende hacemos otra validación para que tenga los datos exactos del backend
-            
-        const res = await createCultivoRequest(payload)
-        const data = await res.json();
 
-        console.log("Json enviado: ", data)
-        alert("Cultivo")
+        await createCultivoRequest(payload)
+
+        alert("Cultivo enviado")
     }
 
 
@@ -46,9 +45,48 @@ export const CultivoForm = () => {
 
     return (
         <div>
-            <form action="">
+            <form onSubmit={handleSubmit}>
+                <input
+                    name="nombreCultivo"
+                    type="text"
+                    placeholder="Write a Cultive"
+                    onChange={handleChange}
+                    
+                />
 
+                <input
+                    name="estacion"
+                    type="text"
+                    placeholder="Write a Estation"
+                    onChange={handleChange}
+                
+                />
+                <input
+                    name="fechaSiembra"
+                    type="date"
+                    placeholder="Write a fechaSiembra"
+                    onChange={handleChange}
+                
+                />
+                <input
+                    name="tempMinOptima"
+                    type=""
+                    placeholder="Write a tempMinOptima"
+                    onChange={handleChange}
+                
+                />
+                <input
+                    name="tempMaxOptima"
+                    type="text"
+                    placeholder="Write a tempMaxOptima"
+                    onChange={handleChange}
+                
+                />
+
+                <button type="submit">Send</button>
             </form>
         </div>
     )
-}
+}   
+
+export default CultivoForm

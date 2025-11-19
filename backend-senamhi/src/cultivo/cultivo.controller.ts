@@ -11,21 +11,36 @@ export class CultivoController {
     async crear(@Body() dto:CrearCultivoDto) {
         return this.cultivoService.crearCultivo(dto)
     }
+
     @Get()
+    async obtenerCultivo() {
+        return this.cultivoService.findAll()
+    }
+
+
+    /*@Get()
     async obtenerTodos() {
         return this.cultivoService.obtenerTodo()
     }
+    */
     @Post('registro')
     async agregarRegistro(@Body() dto:CrearRegistroDto) {
         return this.cultivoService.agregarRegistro(dto)
     }
+
+    /* 
+    @Post('fases')
+    async crearFaseFenologica(@Body() dto: CrearFaseFenologica) {
+        return this.cultivoService.crearFaseFenologica(dto)
+    }
+    */
 
     @Get(':id/fases')
     async obtenerFasesPorCultivo(@Param("id") id:number) {
         return this.cultivoService.obtenerFasesPorCultivo(id);
     }
     
-    @Get('fases')
+    @Get('fases/all')
     async obtenerFases() {
         return this.cultivoService.obtenerFases()
     }

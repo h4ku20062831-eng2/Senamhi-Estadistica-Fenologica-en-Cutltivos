@@ -1,38 +1,40 @@
 import { useState } from "react"
 
-const API = 'http://localhost:3000'
-
-
 export const usePost = (url: string) => {
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const post = async (body: any) => {
-        setLoading(true) // 
-        setError(null)
+        setLoading(true);
+        setError(null);
 
         try {
-
             const res = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
+            });
 
-            })
+            if (!res.ok) throw new Error("Error en la petición");
 
-            if (!res.ok) throw new Error("Error en la petición")
+            const data = await res.json(); 
 
-            const data = await res.json()
-            console.log(`Cuerpo enviado ${data}`)
+            setShowSuccess(true);
 
-            return data;    
+            setTimeout(() => {
+                setShowSuccess(false);
+            }, 3000);
 
+            return data;
 
         } catch (err) {
             setError((err as Error).message);
+            return null;
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
-    return { post, loading, error }
-}
+
+    return { post, loading, error, showSuccess };
+};

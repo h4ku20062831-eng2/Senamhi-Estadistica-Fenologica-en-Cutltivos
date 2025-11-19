@@ -1,45 +1,46 @@
 import { useState, type ChangeEvent, type FormEvent, type ReactHTMLElement } from "react"
+import "./CultivoForm.css"
 
 
-// logica del backend
 interface Props {
 
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    showSuccess: boolean;
 }
 
 
-export const CultivoForm = ({ handleSubmit }: Props) => {
+export const CultivoForm = ({ handleSubmit, showSuccess }: Props) => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input
-                    name="nombreCultivo"
-                    type="text"
-                    placeholder="Write a Cultivo"
-                />
-                <input
-                    name="estacion"
-                    type="text"
-                    placeholder="Write a Estation"
-                />
-                <input
-                    name="fechaSiembra"
-                    type="date"
-                    placeholder="Write a fechaSiembra"
-                />
-                <input
-                    name="tempMinOptima"
-                    type=""
-                    placeholder="Write a tempMinOptima"
-                />
-                <input
-                    name="tempMaxOptima"
-                    type="text"
-                    placeholder="Write a tempMaxOptima"
+                <h2>Crear Cultivo Fenológico</h2>
 
-                />
+                {showSuccess && ( 
+                    <div className="success-message">
+                        ✓ Los datos fueron enviados correctamente
+                    </div>
+                )}
+                <div className="form-group">
+                    <label htmlFor="nombreCultivo">Nombre del Cultivo</label>
+                    <input
+                        id="nombreCultivo"
+                        name="nombreCultivo"
+                        type="text"
+                        placeholder="Ej: Maíz, Cacao, Platano "
+                    />
+                </div>
 
-                <button type="submit">Send</button>
+                <div className="form-group">
+                    <label htmlFor="estacion">Estación del Año</label>
+                    <input
+                        id="estacion"
+                        name="estacion"
+                        type="text"
+                        placeholder="Ej: Aucayacu, Aguaytia, Tingo Maria"
+                    />
+                </div>
+
+                <button type="submit">Registrar Cultivo</button>
             </form>
         </div>
     )

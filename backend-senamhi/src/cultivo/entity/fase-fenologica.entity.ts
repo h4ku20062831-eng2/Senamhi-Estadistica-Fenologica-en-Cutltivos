@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CultivoFase } from "./cultivo-fase.entity";
+import { Cultivo } from "./cultivo.entity";
 
 @Entity('fase_fenologica')
 export class FaseFenologica {
@@ -14,5 +15,8 @@ export class FaseFenologica {
 
     @OneToMany(() => CultivoFase, (cf) => cf.fase)
     cultivoFases: CultivoFase[];
+
+    @ManyToOne(() => Cultivo, (cultivo) => cultivo.fases)
+    cultivo: Cultivo
 
 }

@@ -9,6 +9,7 @@ import { CrearCultivoDto } from "./dto/crear-cultivo.dto";
 import { CultivoAnalisis } from "./cultivo-analisis.service";
 import { CrearRegistroDto } from "./dto/crear-registro.dto";
 import { CultivoRegistro } from "./entity/cultivo-registro.entity";
+import { CrearFaseDto } from "./dto/crear-fase.dto";
 
 @Injectable()
 
@@ -29,7 +30,7 @@ export class CultivoService {
         @InjectRepository(CultivoRegistro)
         private cultivoRegistro: Repository<CultivoRegistro>
 
-        
+
 
     ) { }
 
@@ -37,17 +38,15 @@ export class CultivoService {
         const cultivo = this.cultivoRepo.create({
             estacion: dto.estacion,
             nombreCultivo: dto.nombreCultivo, // El DTO que llega del frontend, hace llegar al backend
-            fechaSiembra: dto.fechaSiembra,
-            tempMinOptima: dto.tempMinOptima,
-            tempMaxOptima: dto.tempMaxOptima
-
             // Espacio para implementar temperatura
-        
+
         })
 
-        await this.cultivoRepo.save(cultivo) // Se guarda el nombre del cultivo en la tabla Cultivo
+        return await this.cultivoRepo.save(cultivo) // Se guarda el nombre del cultivo en la tabla Cultivo
 
-        
+
+
+
     }
 
     async agregarRegistro(dto: CrearRegistroDto) {
@@ -59,17 +58,24 @@ export class CultivoService {
             relations: ["cultivo", "fase"],
         });
 
-        if (!cultivoFase) return 'No existe la relación cultivo-fase'
+        if (!cultivoFase)
+            return "No existe la relación cultivo-fase";
 
         const nuevoRegistro = this.cultivoRegistro.create({
             cultivoFase,
-            fecha: new Date(),
+            fechaSiembra: new Date(),
             valor: dto.valor
-        })
+        });
 
-        await this.cultivoRegistro.save(nuevoRegistro)
+        await this.cultivoRegistro.save(nuevoRegistro);
 
         return { mensaje: "Registro agregado correctamente", nuevoRegistro };
+    }
+
+    async findAll() {
+        return await this.cultivoRepo.find({
+            relations:  ["fases"],
+        })
     }
 
     async obtenerTodo() {
@@ -79,13 +85,13 @@ export class CultivoService {
         })
     }
 
-    async obtenerFases(){
+    async obtenerFases() {
         return await this.faseRepo.find();
     }
 
     async obtenerFasesPorCultivo(cultivoId: number) {
         const cultivo = await this.cultivoRepo.findOne({
-            where: {id: cultivoId },
+            where: { id: cultivoId },
             relations: ["fases", "fases.fase"],
         });
 
@@ -110,7 +116,7 @@ export class CultivoService {
                 return {
                     cultivo: d.cultivo.nombreCultivo,
                     fases: d.cultivo.fases,
-                    fecha: registro.fecha,
+                    fecha: registro.fechaSiembra,
                     valor: registro.valor,
                     analisis: resultado,
                 }
@@ -119,7 +125,20 @@ export class CultivoService {
 
         // Mapeamos o creamos otro array con valores existentes pero agregando su analisis a cada fase
 
-            return datos
+        return datos
     }
+
+
+   /* async crearFaseFenologica(dto: CrearFaseDto) {
+        const fenologica = this.faseRepo.create({
+            codigo: dto.FaseFenologica,
+            descripcion: dto.descripcion ?? null,
+            cultivo: { id: dto.cultivoId }
+
+        })
+
+        await this.faseRepo.save(fenologica)
+    }
+*/
 
 }

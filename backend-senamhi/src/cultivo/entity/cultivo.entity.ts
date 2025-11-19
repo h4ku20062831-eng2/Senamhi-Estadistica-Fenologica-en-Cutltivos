@@ -7,21 +7,12 @@ export class Cultivo {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column('string')
+    @Column('varchar')
     nombreCultivo: string
 
-    @Column('string')
+    @Column('varchar')
     estacion: string
 
-    @Column({ type: 'date' })
-    fechaSiembra: Date;
-
-    // Espacio para relacional Cultivo con Temperatura
-    @Column({ type: 'float' })
-    tempMinOptima: number
-
-    @Column({ type: 'float' })
-    tempMaxOptima: number;
 
     @OneToMany(() => CultivoFase, (cf) => cf.cultivo)
     fases: CultivoFase[] // Un cultivo tiene muchas fases, por ende OneToMany, y llamamos CultivoFase para tenerlo como FK

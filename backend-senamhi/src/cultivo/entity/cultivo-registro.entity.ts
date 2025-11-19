@@ -10,7 +10,15 @@ export class CultivoRegistro {
   cultivoFase: CultivoFase;
 
   @Column({ type: 'date' })
-  fecha: Date;
+  fechaSiembra: Date;
+
+  // Espacio para relacional Cultivo con Temperatura
+  @Column({ type: 'float' })
+  tempMinOptima: number
+
+  @Column({ type: 'float' })
+  tempMaxOptima: number;
+
 
   @Column('float')
   valor: number;
